@@ -1,0 +1,4 @@
+* text=auto
+*.ico binary
+# Preserve third-party license text as supplied, including its original whitespace.
+THIRD-PARTY-NOTICES.txt -whitespace
