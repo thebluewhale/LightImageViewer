@@ -112,8 +112,8 @@ korean.DefaultAppsHint=Windows 설정에서 LightImageViewer로 열 이미지 �
 english.DefaultAppsHint=Choose which image extensions to open with LightImageViewer in Windows Settings.
 korean.DefaultAppsOpenFailed=Windows 설정을 열지 못했습니다. 설정 → 앱 → 기본 앱에서 LightImageViewer를 찾아주세요.
 english.DefaultAppsOpenFailed=Could not open Windows Settings. Go to Settings > Apps > Default apps and find LightImageViewer.
-korean.SettingsQuestion=현재 제거 프로세스 계정의 창 크기·위치 설정과 오류 로그도 삭제하시겠습니까?%n%n포터블 EXE와 설치 버전은 같은 설정을 사용합니다.%n'예'를 선택하면 포터블 버전의 설정도 초기화됩니다.%n%n예: 설정과 오류 로그 삭제%n아니요: 설정 유지 (권장)%n%n이미지 파일은 삭제하지 않습니다.
-english.SettingsQuestion=Also delete saved window settings and the error log for the account running this uninstaller?%n%nThe portable EXE and installed app share these settings.%nChoosing Yes also resets settings for the portable app.%n%nYes: Delete settings and the error log%nNo: Keep settings (recommended)%n%nYour image files will not be deleted.
+korean.SettingsQuestion=현재 제거 프로세스 계정의 창 크기·위치·보기 모드 설정과 오류 로그도 삭제하시겠습니까?%n%n포터블 EXE와 설치 버전은 같은 설정을 사용합니다.%n'예'를 선택하면 포터블 버전의 설정도 초기화됩니다.%n%n예: 설정과 오류 로그 삭제%n아니요: 설정 유지 (권장)%n%n이미지 파일은 삭제하지 않습니다.
+english.SettingsQuestion=Also delete saved window/view mode settings and the error log for the account running this uninstaller?%n%nThe portable EXE and installed app share these settings.%nChoosing Yes also resets settings for the portable app.%n%nYes: Delete settings and the error log%nNo: Keep settings (recommended)%n%nYour image files will not be deleted.
 korean.SettingsDeleteFailed=프로그램 제거는 완료되었지만 일부 설정 파일을 삭제하지 못했습니다. 실행 중인 LightImageViewer를 종료한 뒤 다음 폴더를 확인하세요:
 english.SettingsDeleteFailed=The program was removed, but some settings files could not be deleted. Close any running LightImageViewer and check this folder:
 

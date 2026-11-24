@@ -8,6 +8,7 @@ try {
     $env:DOTNET_NOLOGO = '1'
     $dotnetPath = Join-Path $projectRoot '.tools/dotnet/dotnet.exe'
     if (-not (Test-Path -LiteralPath $dotnetPath)) { $dotnetPath = 'dotnet' }
+    & (Join-Path $PSScriptRoot 'Build-AppIcon.ps1')
     if (-not $SkipTests) {
         python tests/create_fixtures.py
         if ($LASTEXITCODE -ne 0) { throw 'Fixture generation failed (requires Python + Pillow)' }

@@ -6,8 +6,12 @@ using System.Windows.Interop;
 
 namespace ImageViewer;
 
+internal enum ImageViewMode { Fit, ActualSize }
+
 internal sealed record WindowPlacement(double Left, double Top, double Width, double Height, bool Maximized)
 {
+    public ImageViewMode ViewMode { get; init; } = ImageViewMode.Fit;
+
     public bool IsValid => double.IsFinite(Left) && double.IsFinite(Top) && double.IsFinite(Width) &&
         double.IsFinite(Height) && Width >= 460 && Height >= 300 && Width < 30000 && Height < 30000 &&
         Math.Abs(Left) < 100000 && Math.Abs(Top) < 100000;
@@ -21,7 +25,8 @@ internal static class WindowPlacementStore
         try
         {
             var value = JsonSerializer.Deserialize<WindowPlacement>(File.ReadAllText(path));
-            return value?.IsValid == true ? value : null;
+            if (value?.IsValid != true) return null;
+            return Enum.IsDefined(value.ViewMode) ? value : value with { ViewMode = ImageViewMode.Fit };
         }
         catch { return null; }
     }

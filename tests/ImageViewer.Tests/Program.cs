@@ -220,6 +220,7 @@ internal static partial class Program
         await RunFeatureTests();
         await RunLoadingFeedbackTests();
         await RunTransitionTests();
+        await RunViewModeTests();
         await RunExtendedFormatTests();
     }
 

@@ -176,7 +176,7 @@ public partial class MainWindow : Window
             StateText.Text = "";
             WelcomePanel.Visibility = MessagePanel.Visibility = Visibility.Collapsed;
             ImageFrame.Visibility = Visibility.Visible;
-            _view.Fit();
+            ApplyPreferredViewMode();
             UpdateImageSize();
             UpdateToolbar();
             if (image.FrameCount > 1) StartAnimation(path, version, PreviewEdge);
@@ -379,13 +379,13 @@ public partial class MainWindow : Window
         var assembly = Assembly.GetExecutingAssembly();
         var name = assembly.GetManifestResourceNames().First(n => n.EndsWith("THIRD-PARTY-NOTICES.txt", StringComparison.Ordinal));
         using var reader = new StreamReader(assembly.GetManifestResourceStream(name)!);
-        var content = "LightImageViewer 0.3.5\n\nCtrl+O: 파일 열기 / 파일을 창에 끌어 놓아도 열 수 있습니다.\n" +
+        var content = "LightImageViewer 0.3.6\n\nCtrl+O: 파일 열기 / 파일을 창에 끌어 놓아도 열 수 있습니다.\n" +
             "→ ↓ Page Down: 다음 / ← ↑ Page Up: 이전\n첫 파일과 마지막 파일은 서로 이어집니다.\n" +
             "Home / End: 첫 파일 / 마지막 파일\n휠 위: 이전 이미지 / 휠 아래: 다음 이미지\n" +
             "Ctrl+휠 또는 + / -: 확대·축소, 드래그: 이미지 이동\n" +
             "1: 원본 크기 / F: 창에 맞추기 / F11: 전체화면 / Esc: 복귀\n" +
             "Space: 애니메이션 재생·정지 / [ ]: TIFF 페이지 이동\n" +
-            "창 위치·크기·최대화 상태를 기억합니다. GIF·WebP·ANI 애니메이션을 자동 재생합니다.\n" +
+            "창 위치·크기·최대화 상태와 창 맞춤/원본 크기 보기 모드를 기억합니다. GIF·WebP·ANI 애니메이션을 자동 재생합니다.\n" +
             "PSD/PSB는 저장된 합성 이미지를 표시합니다.\n" +
             "파일 8 GiB · 원본 10억 픽셀 이하 / 표시 데이터 3,200만 픽셀·긴 변 16,384px 이하\n" +
             "대형 이미지는 표시 해상도를 제한합니다. MB는 1,000,000 bytes입니다.\n" +

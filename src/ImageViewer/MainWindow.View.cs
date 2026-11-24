@@ -8,6 +8,7 @@ namespace ImageViewer;
 public partial class MainWindow
 {
     private readonly ViewTransform _view = new();
+    private ImageViewMode _preferredViewMode = ImageViewMode.Fit;
     private Point? _dragPoint;
     private WindowPlacement? _beforeFullscreen;
     internal bool IsFullscreen { get; private set; }
@@ -40,8 +41,23 @@ public partial class MainWindow
         RequestRefinement();
     }
 
-    internal void FitImage() { _view.Fit(); UpdateImageSize(); RequestRefinement(); }
-    internal void ActualSize() { _view.Actual(); UpdateImageSize(); RequestRefinement(); }
+    internal void FitImage() => SetPreferredViewMode(ImageViewMode.Fit);
+    internal void ActualSize() => SetPreferredViewMode(ImageViewMode.ActualSize);
+
+    private void SetPreferredViewMode(ImageViewMode mode)
+    {
+        _preferredViewMode = mode;
+        ApplyPreferredViewMode();
+        UpdateImageSize();
+        RequestRefinement();
+        SavePlacement();
+    }
+
+    private void ApplyPreferredViewMode()
+    {
+        if (_preferredViewMode == ImageViewMode.ActualSize) _view.Actual();
+        else _view.Fit();
+    }
     private void OnZoomOutClick(object sender, RoutedEventArgs e) => ZoomBy(1 / 1.2);
     private void OnZoomInClick(object sender, RoutedEventArgs e) => ZoomBy(1.2);
     private void OnActualClick(object sender, RoutedEventArgs e) => ActualSize();
@@ -119,7 +135,9 @@ public partial class MainWindow
             Toolbar.Visibility = Statusbar.Visibility = Visibility.Collapsed;
             // Native physical monitor bounds include the taskbar area on the current monitor.
             if (IsLoaded) NativeWindow.CoverMonitor(this);
-            FitImage();
+            ApplyPreferredViewMode();
+            UpdateImageSize();
+            RequestRefinement();
         }
         else
         {
@@ -129,16 +147,19 @@ public partial class MainWindow
             ResizeMode = ResizeMode.CanResize;
             Toolbar.Visibility = Statusbar.Visibility = Visibility.Visible;
             if (_beforeFullscreen is { } saved) ApplyPlacement(saved);
+            ApplyPreferredViewMode();
             UpdateImageSize();
+            RequestRefinement();
         }
     }
 
     private WindowPlacement CapturePlacement()
     {
-        if (IsFullscreen && _beforeFullscreen is { } saved) return saved;
+        if (IsFullscreen && _beforeFullscreen is { } saved) return saved with { ViewMode = _preferredViewMode };
         var bounds = WindowState == WindowState.Normal ? new Rect(Left, Top, Width, Height) : RestoreBounds;
         return new WindowPlacement(bounds.Left, bounds.Top, bounds.Width, bounds.Height,
-            WindowState == WindowState.Maximized || (WindowState == WindowState.Minimized && _lastNonMinimizedState == WindowState.Maximized));
+            WindowState == WindowState.Maximized || (WindowState == WindowState.Minimized && _lastNonMinimizedState == WindowState.Maximized))
+            { ViewMode = _preferredViewMode };
     }
 
     private WindowState _lastNonMinimizedState;
@@ -149,7 +170,11 @@ public partial class MainWindow
             if (WindowState != WindowState.Minimized) _lastNonMinimizedState = WindowState;
         };
         if (_settingsPath is not null && WindowPlacementStore.Load(_settingsPath) is { } saved)
+        {
+            _preferredViewMode = saved.ViewMode;
+            ApplyPreferredViewMode();
             ApplyPlacement(NativeWindow.KeepVisible(saved));
+        }
     }
 
     private void ApplyPlacement(WindowPlacement saved)

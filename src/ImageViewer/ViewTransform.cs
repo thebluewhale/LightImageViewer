@@ -16,7 +16,7 @@ internal sealed class ViewTransform
     public void Layout(Size image, Size viewport)
     {
         if (image.Width <= 0 || image.Height <= 0 || viewport.Width <= 0 || viewport.Height <= 0) return;
-        if (IsFit) Zoom = Math.Min(1, Math.Min(viewport.Width / image.Width, viewport.Height / image.Height));
+        if (IsFit) Zoom = Math.Min(viewport.Width / image.Width, viewport.Height / image.Height);
         Clamp(image, viewport);
     }
 
@@ -24,7 +24,9 @@ internal sealed class ViewTransform
     {
         if (image.Width <= 0 || image.Height <= 0) return;
         var old = Zoom;
-        Zoom = Math.Clamp(Zoom * factor, MinZoom, MaxZoom);
+        // A fit scale can lie outside manual zoom bounds for very small or large images.
+        // Keep wheel zoom continuous instead of jumping to the nearest bound.
+        Zoom = Math.Clamp(Zoom * factor, Math.Min(MinZoom, old), Math.Max(MaxZoom, old));
         var relative = anchor - new Point(viewport.Width / 2, viewport.Height / 2);
         Offset = relative - (relative - Offset) * (Zoom / old);
         IsFit = false;
